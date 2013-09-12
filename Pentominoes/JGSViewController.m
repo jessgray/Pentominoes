@@ -16,9 +16,11 @@
 @interface JGSViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *mainBoard;
 - (IBAction)newBoardSelected:(id)sender;
+- (IBAction)solveGame:(id)sender;
 
 @property NSInteger currentBoard;
-@property NSMutableArray *boardPieces;
+@property (nonatomic, strong) NSMutableArray *boardPieces;
+@property (nonatomic, strong) NSArray *solutions;
 @end
 
 @implementation JGSViewController
@@ -42,6 +44,11 @@
         
         [self.boardPieces addObject:boardPiece];
     }
+
+    // Create solutions array for use when the user clicks the "solve" button
+    NSString *solutionsPath = [[NSBundle mainBundle] pathForResource:@"Solutions" ofType:@"plist"];
+    self.solutions = [NSArray arrayWithContentsOfFile:solutionsPath];
+
 }
 
 -(void)movePiecesToDefaultPosition {
@@ -101,5 +108,10 @@
     
     NSString *newBoardImage = [NSString stringWithFormat:@"Board%i.png", [sender tag]-1];
     self.mainBoard.image = [UIImage imageNamed:newBoardImage];
+}
+
+- (IBAction)solveGame:(id)sender {
+    
+    
 }
 @end
