@@ -7,17 +7,19 @@
 //
 
 #import "JGSViewController.h"
-#define spaceBelowMainBoard 50
-#define edgeMargin 100
-#define columnSpaceBetweenPieces 20
-#define rowSpaceBetweenPieces 50
-#define sideOfSquare 30
+#define kSpaceBelowMainBoard 50
+#define kEdgeMargin 100
+#define kColumnSpaceBetweenPieces 20
+#define kRowSpaceBetweenPieces 50
+#define kSideOfSquare 30
+#define kAnimationTransition 0.5
 
 
 @interface JGSViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *mainBoard;
 - (IBAction)newBoardSelected:(id)sender;
 - (IBAction)solveGame:(id)sender;
+- (IBAction)resetPieces:(id)sender;
 
 @property NSUInteger currentBoard;
 @property (nonatomic, strong) NSMutableArray *boardPieces;
@@ -61,42 +63,15 @@
 -(void)viewDidAppear:(BOOL)animated {
     CGSize screenSize = self.view.bounds.size;
     CGSize boardSize = self.mainBoard.bounds.size;
-    CGFloat xCoord = 0.0;
-    CGFloat yCoord = 0.0;
-    CGFloat largestHeight = 0.0;
     
-    // Create a container to hold all of the pieces 
-    CGRect frame = CGRectMake(edgeMargin, boardSize.height+spaceBelowMainBoard, screenSize.width-edgeMargin, screenSize.height-spaceBelowMainBoard-boardSize.height);
+    // Create a container to hold all of the pieces
+    CGRect frame = CGRectMake(kEdgeMargin, boardSize.height+kSpaceBelowMainBoard, screenSize.width-kEdgeMargin, screenSize.height-kSpaceBelowMainBoard-boardSize.height);
     self.piecesContainer = [[UIImageView alloc] initWithFrame:frame];
-    
-    // Place each piece into the container, spacing them appropriately
-    for (UIImageView *piece in self.boardPieces) {
-        CGSize pieceSize = piece.bounds.size;
-        
-        if(pieceSize.height > largestHeight) {
-            largestHeight = pieceSize.height;
-        }
-        
-        // Make sure the piece fits within the frame of the piece container. Wrap piece onto the next row
-        // if it can't fit in the current row. 
-        if(xCoord+pieceSize.width > screenSize.width-2*edgeMargin) {
-            xCoord = 0.0;
-            yCoord += largestHeight + rowSpaceBetweenPieces;
-            largestHeight = 0.0;
-            
-        }
-        
-        // Create a frame for the piece and add the piece to the piece container
-        CGRect pieceFrame = CGRectMake(xCoord, yCoord, pieceSize.width, pieceSize.height);
-        [self.piecesContainer addSubview:piece];
-        [piece setFrame:pieceFrame];
-        
-        xCoord += pieceFrame.size.width + columnSpaceBetweenPieces;
-    }
     
     // Add pieces to the game board
     [self.view addSubview:self.piecesContainer];
     
+    [self movePiecesToOriginalArea];
 }
 
 - (void)didReceiveMemoryWarning
@@ -115,26 +90,92 @@
 
 - (IBAction)solveGame:(id)sender {
     
-    
     if(self.currentBoard != 0) {
-        NSUInteger count = 0;
+        NSUInteger boardPieceIndex = 0;
+        NSDictionary *thisSolution = [self.solutions objectAtIndex:self.currentBoard-1];
+        
+        // Move each piece onto the game board in the correct position
         for (NSString *key in self.boardPieceLetters) {
             
-            NSInteger xCoord, yCoord;
-            UIImageView *currentPiece = [self.boardPieces objectAtIndex:count];
+            NSDictionary *currentSolution = [thisSolution valueForKey:key];
+            NSInteger xCoord, yCoord, numRotations, numFlips;
+            UIImageView *currentPiece = [self.boardPieces objectAtIndex:boardPieceIndex];
             
-            xCoord = [[[[self.solutions objectAtIndex:self.currentBoard-1] objectForKey:key] valueForKey:@"x"] integerValue];
-            yCoord = [[[[self.solutions objectAtIndex:self.currentBoard-1] objectForKey:key] valueForKey:@"y"] integerValue];
+            // Get values from the solution
+            xCoord = [[currentSolution valueForKey:@"x"] integerValue]*kSideOfSquare;
+            yCoord = [[currentSolution valueForKey:@"y"] integerValue]*kSideOfSquare;
+            numRotations = [[currentSolution valueForKey:@"rotations"] integerValue];
+            numFlips = [[currentSolution valueForKey:@"flips"] integerValue];
             
-            [currentPiece setFrame:CGRectMake(xCoord*sideOfSquare, yCoord*sideOfSquare, currentPiece.frame.size.width, currentPiece.frame.size.height)];
-            
-            [currentPiece convertPoint:currentPiece.frame.origin fromView:self.mainBoard];
+            [currentPiece convertPoint:CGPointMake(xCoord, yCoord) toView:self.mainBoard];
             [self.mainBoard addSubview:currentPiece];
             
-            count++;
+            
+            [UIView animateWithDuration:kAnimationTransition animations:^{
+                // Apply rotations and flips
+                if(numRotations > 0) {
+                    currentPiece.transform = CGAffineTransformMakeRotation(numRotations*M_PI_2);
+                }
+                if(numFlips > 0) {
+                    currentPiece.transform = CGAffineTransformScale(currentPiece.transform, -1.0, 1.0);
+                }
+                
+                // Put piece onto the game board
+                [currentPiece setFrame:CGRectMake(xCoord, yCoord, currentPiece.frame.size.width, currentPiece.frame.size.height)];
+            }];
+            
+            
+            
+            boardPieceIndex++;
         }
     }
+}
+
+-(void)movePiecesToOriginalArea {
+    CGSize screenSize = self.view.bounds.size;
+    CGFloat xCoord = 0.0;
+    CGFloat yCoord = 0.0;
+    CGFloat largestHeight = 0.0;
     
+    // Place each piece into the container, spacing them appropriately
+    for (UIImageView *piece in self.boardPieces) {
+        CGSize pieceSize = piece.bounds.size;
+        
+        if(pieceSize.height > largestHeight) {
+            largestHeight = pieceSize.height;
+        }
+        
+        // Make sure the piece fits within the frame of the piece container. Wrap piece onto the next row
+        // if it can't fit in the current row.
+        if(xCoord+pieceSize.width > screenSize.width-2*kEdgeMargin) {
+            xCoord = 0.0;
+            yCoord += largestHeight + kRowSpaceBetweenPieces;
+            largestHeight = 0.0;
+            
+        }
+        
+        // Create a frame for the piece and add the piece to the piece container
+        CGRect pieceFrame = CGRectMake(xCoord, yCoord, pieceSize.width, pieceSize.height);
+        [self.piecesContainer addSubview:piece];
+        [piece setFrame:pieceFrame];
+        
+        xCoord += pieceFrame.size.width + kColumnSpaceBetweenPieces;
+    }
+}
+
+- (IBAction)resetPieces:(id)sender {
+    
+    [UIImageView animateWithDuration:kAnimationTransition animations:^{
+        
+        // Undo any transforms applied to pieces
+        for (UIImageView *piece in self.boardPieces) {
+            piece.transform = CGAffineTransformIdentity;
+        }
+        
+        // Move pieces back to the original area
+        [self movePiecesToOriginalArea];
+        
+    }];
     
 }
 @end
