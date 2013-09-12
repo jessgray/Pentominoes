@@ -14,7 +14,8 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" image="Board0.png" translatesAutoresizingMaskIntoConstraints="NO" id="3OU-2S-BtB">
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="494" id="Of3-EK-UDi"/>
+                                    <constraint firstAttribute="width" constant="508" id="EMY-QV-TWH"/>
+                                    <constraint firstAttribute="height" constant="496" id="cPW-rR-zuS"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sGB-04-rfU">
@@ -33,7 +34,7 @@
                                     <action selector="newBoardSelected:" destination="2" eventType="touchUpInside" id="gn6-S1-BlP"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oWb-Ib-vG0">
+                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZCt-fL-nNL">
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Board2" image="Board1button.png">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
@@ -43,7 +44,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="newBoardSelected:" destination="2" eventType="touchUpInside" id="RDw-VB-2xw"/>
+                                    <action selector="newBoardSelected:" destination="2" eventType="touchUpInside" id="6cJ-A3-6bs"/>
                                 </connections>
                             </button>
                             <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="diL-Zh-J9s">
@@ -131,28 +132,27 @@
                         <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="EMV-3j-YXt" firstAttribute="baseline" secondItem="3QX-yg-BM3" secondAttribute="baseline" type="default" id="4h3-cj-jmC"/>
-                            <constraint firstItem="diL-Zh-J9s" firstAttribute="leading" secondItem="oWb-Ib-vG0" secondAttribute="leading" type="default" id="B1C-hg-eQg"/>
+                            <constraint firstItem="ZCt-fL-nNL" firstAttribute="baseline" secondItem="HSx-jR-dZa" secondAttribute="baseline" type="default" id="9uq-Au-ldK"/>
                             <constraint firstItem="EMV-3j-YXt" firstAttribute="centerX" secondItem="wFT-le-xtQ" secondAttribute="centerX" type="default" id="HvS-j5-CA6"/>
+                            <constraint firstItem="ZCt-fL-nNL" firstAttribute="leading" secondItem="sGB-04-rfU" secondAttribute="leading" type="default" id="JEm-Yi-xWF"/>
                             <constraint firstItem="Mj2-3j-rof" firstAttribute="top" secondItem="5" secondAttribute="top" constant="20" symbolic="YES" type="default" id="KCF-ou-dpT"/>
+                            <constraint firstItem="ZCt-fL-nNL" firstAttribute="leading" secondItem="diL-Zh-J9s" secondAttribute="leading" type="default" id="NZI-NV-pRs"/>
                             <constraint firstItem="3OU-2S-BtB" firstAttribute="top" secondItem="5" secondAttribute="top" constant="20" symbolic="YES" type="default" id="NfU-ee-H9S"/>
                             <constraint firstItem="3QX-yg-BM3" firstAttribute="top" secondItem="5" secondAttribute="top" constant="442" id="OsW-hv-lTU"/>
                             <constraint firstItem="3OU-2S-BtB" firstAttribute="leading" secondItem="diL-Zh-J9s" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="PI0-uB-y1Y"/>
                             <constraint firstItem="HSx-jR-dZa" firstAttribute="leading" secondItem="3OU-2S-BtB" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="PJ6-PH-PYI"/>
                             <constraint firstItem="3OU-2S-BtB" firstAttribute="leading" secondItem="sGB-04-rfU" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="Qls-2b-cF6"/>
-                            <constraint firstItem="oWb-Ib-vG0" firstAttribute="leading" secondItem="sGB-04-rfU" secondAttribute="leading" type="default" id="SeV-sB-3kf"/>
                             <constraint firstItem="wFT-le-xtQ" firstAttribute="leading" secondItem="3OU-2S-BtB" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="SzK-xV-y43"/>
                             <constraint firstItem="wFT-le-xtQ" firstAttribute="baseline" secondItem="diL-Zh-J9s" secondAttribute="baseline" type="default" id="TCC-GP-1B6"/>
                             <constraint firstItem="3OU-2S-BtB" firstAttribute="centerX" secondItem="5" secondAttribute="centerX" type="default" id="TGL-EE-VZi"/>
-                            <constraint firstItem="3OU-2S-BtB" firstAttribute="leading" secondItem="oWb-Ib-vG0" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="UFQ-vp-RrK"/>
                             <constraint firstItem="HSx-jR-dZa" firstAttribute="trailing" secondItem="Mj2-3j-rof" secondAttribute="trailing" type="default" id="Uhc-iS-mEd"/>
+                            <constraint firstItem="3OU-2S-BtB" firstAttribute="leading" secondItem="ZCt-fL-nNL" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="bVL-sB-ICc"/>
                             <constraint firstItem="Mj2-3j-rof" firstAttribute="leading" secondItem="3OU-2S-BtB" secondAttribute="trailing" constant="8" symbolic="YES" type="default" id="e9c-Iv-Sjr"/>
-                            <constraint firstItem="oWb-Ib-vG0" firstAttribute="baseline" secondItem="HSx-jR-dZa" secondAttribute="baseline" type="default" id="eP6-Tz-qND"/>
                             <constraint firstItem="diL-Zh-J9s" firstAttribute="top" secondItem="5" secondAttribute="top" constant="302" id="iC3-E7-cZV"/>
-                            <constraint firstItem="sGB-04-rfU" firstAttribute="leading" secondItem="5" secondAttribute="leading" constant="17" id="keP-FB-UKs"/>
                             <constraint firstItem="sGB-04-rfU" firstAttribute="top" secondItem="5" secondAttribute="top" constant="20" symbolic="YES" type="default" id="qRT-Sy-7bO"/>
                             <constraint firstItem="wFT-le-xtQ" firstAttribute="trailing" secondItem="HSx-jR-dZa" secondAttribute="trailing" type="default" id="sfr-1M-SJS"/>
                             <constraint firstItem="3QX-yg-BM3" firstAttribute="centerX" secondItem="diL-Zh-J9s" secondAttribute="centerX" type="default" id="tVC-LN-cZ9"/>
-                            <constraint firstItem="oWb-Ib-vG0" firstAttribute="top" secondItem="5" secondAttribute="top" constant="161" id="wZk-GG-lbl"/>
+                            <constraint firstItem="ZCt-fL-nNL" firstAttribute="top" secondItem="5" secondAttribute="top" constant="161" id="wjZ-8B-4fh"/>
                         </constraints>
                     </view>
                     <connections>
@@ -176,18 +176,6 @@
         <image name="Board4button.png" width="105" height="105"/>
         <image name="Board5button.png" width="105" height="105"/>
     </resources>
-    <classes>
-        <class className="JGSViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JGSViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="newBoardSelected:"/>
-                <relationship kind="outlet" name="mainBoard" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>
