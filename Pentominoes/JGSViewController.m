@@ -9,7 +9,10 @@
 #import "JGSViewController.h"
 
 @interface JGSViewController ()
+@property (weak, nonatomic) IBOutlet UIImageView *mainBoard;
+- (IBAction)newBoardSelected:(id)sender;
 
+@property NSInteger currentBoard;
 @end
 
 @implementation JGSViewController
@@ -26,4 +29,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)newBoardSelected:(id)sender {
+    
+    self.currentBoard = [sender tag];
+    
+    NSString *newBoardImage = [NSString stringWithFormat:@"Board%i.png", [sender tag]-1];
+    self.mainBoard.image = [UIImage imageNamed:newBoardImage];
+}
 @end
