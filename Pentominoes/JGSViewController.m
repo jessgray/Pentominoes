@@ -11,6 +11,7 @@
 #define edgeMargin 100
 #define columnSpaceBetweenPieces 20
 #define rowSpaceBetweenPieces 50
+#define sideOfSquare 30
 
 
 @interface JGSViewController ()
@@ -18,9 +19,11 @@
 - (IBAction)newBoardSelected:(id)sender;
 - (IBAction)solveGame:(id)sender;
 
-@property NSInteger currentBoard;
+@property NSUInteger currentBoard;
 @property (nonatomic, strong) NSMutableArray *boardPieces;
+@property (nonatomic, strong) NSArray *boardPieceLetters;
 @property (nonatomic, strong) NSArray *solutions;
+@property (nonatomic, strong) UIView *piecesContainer;
 @end
 
 @implementation JGSViewController
@@ -31,12 +34,12 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     self.boardPieces = [[NSMutableArray alloc] init];
-    NSArray *boardPieceLetters = [NSArray arrayWithObjects:@"F", @"I", @"L", @"N", @"P", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
+    self.boardPieceLetters = [NSArray arrayWithObjects:@"F", @"I", @"L", @"N", @"P", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
     
     // Create mutable array of board pieces that are each UIImageViews half the size of their corresponding UIImage
-    for(NSUInteger i = 0; i < [boardPieceLetters count]; i++) {
+    for(NSUInteger i = 0; i < [self.boardPieceLetters count]; i++) {
         
-        UIImage *pieceImage = [UIImage imageNamed: [NSString stringWithFormat:@"tile%@.png", boardPieceLetters[i]]];
+        UIImage *pieceImage = [UIImage imageNamed: [NSString stringWithFormat:@"tile%@.png", self.boardPieceLetters[i]]];
         UIImageView *boardPiece = [[UIImageView alloc] initWithImage:pieceImage];
         
         CGSize pieceImageSize = pieceImage.size;
@@ -64,7 +67,7 @@
     
     // Create a container to hold all of the pieces 
     CGRect frame = CGRectMake(edgeMargin, boardSize.height+spaceBelowMainBoard, screenSize.width-edgeMargin, screenSize.height-spaceBelowMainBoard-boardSize.height);
-    UIView *piecesContainer = [[UIImageView alloc] initWithFrame:frame];
+    self.piecesContainer = [[UIImageView alloc] initWithFrame:frame];
     
     // Place each piece into the container, spacing them appropriately
     for (UIImageView *piece in self.boardPieces) {
@@ -85,14 +88,14 @@
         
         // Create a frame for the piece and add the piece to the piece container
         CGRect pieceFrame = CGRectMake(xCoord, yCoord, pieceSize.width, pieceSize.height);
-        [piecesContainer addSubview:piece];
+        [self.piecesContainer addSubview:piece];
         [piece setFrame:pieceFrame];
         
         xCoord += pieceFrame.size.width + columnSpaceBetweenPieces;
     }
     
     // Add pieces to the game board
-    [self.view addSubview:piecesContainer];
+    [self.view addSubview:self.piecesContainer];
     
 }
 
@@ -104,13 +107,33 @@
 
 - (IBAction)newBoardSelected:(id)sender {
     
-    self.currentBoard = [sender tag];
+    self.currentBoard = [sender tag] - 1;
     
-    NSString *newBoardImage = [NSString stringWithFormat:@"Board%i.png", [sender tag]-1];
+    NSString *newBoardImage = [NSString stringWithFormat:@"Board%i.png", self.currentBoard];
     self.mainBoard.image = [UIImage imageNamed:newBoardImage];
 }
 
 - (IBAction)solveGame:(id)sender {
+    
+    
+    if(self.currentBoard != 0) {
+        NSUInteger count = 0;
+        for (NSString *key in self.boardPieceLetters) {
+            
+            NSInteger xCoord, yCoord;
+            UIImageView *currentPiece = [self.boardPieces objectAtIndex:count];
+            
+            xCoord = [[[[self.solutions objectAtIndex:self.currentBoard-1] objectForKey:key] valueForKey:@"x"] integerValue];
+            yCoord = [[[[self.solutions objectAtIndex:self.currentBoard-1] objectForKey:key] valueForKey:@"y"] integerValue];
+            
+            [currentPiece setFrame:CGRectMake(xCoord*sideOfSquare, yCoord*sideOfSquare, currentPiece.frame.size.width, currentPiece.frame.size.height)];
+            
+            [currentPiece convertPoint:currentPiece.frame.origin fromView:self.mainBoard];
+            [self.mainBoard addSubview:currentPiece];
+            
+            count++;
+        }
+    }
     
     
 }
