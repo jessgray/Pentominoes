@@ -102,7 +102,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="3QX-yg-BM3">
                                 <rect key="frame" x="51" y="397" width="73" height="44"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Reset">
+                                <state key="normal" backgroundImage="resetButton.png">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -116,7 +116,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="EMV-3j-YXt">
                                 <rect key="frame" x="639" y="397" width="73" height="44"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Solve">
+                                <state key="normal" backgroundImage="solveButton.png">
                                     <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -128,10 +128,17 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.25098040700000002" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <connections>
+                        <outlet property="board1" destination="sGB-04-rfU" id="Nit-Vo-lDO"/>
+                        <outlet property="board2" destination="ZCt-fL-nNL" id="9ql-Sr-vvP"/>
+                        <outlet property="board3" destination="diL-Zh-J9s" id="lRC-H3-fp5"/>
+                        <outlet property="board4" destination="Mj2-3j-rof" id="uJo-XL-FWr"/>
+                        <outlet property="board5" destination="HSx-jR-dZa" id="3Cn-xR-5Ds"/>
+                        <outlet property="board6" destination="wFT-le-xtQ" id="E0Z-en-nPp"/>
                         <outlet property="mainBoard" destination="3OU-2S-BtB" id="By6-Yl-nDo"/>
+                        <outlet property="solveButton" destination="EMV-3j-YXt" id="vt5-e0-D7t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3" sceneMemberID="firstResponder"/>
@@ -150,18 +157,9 @@
         <image name="Board3button.png" width="105" height="105"/>
         <image name="Board4button.png" width="105" height="105"/>
         <image name="Board5button.png" width="105" height="105"/>
+        <image name="resetButton.png" width="73" height="44"/>
+        <image name="solveButton.png" width="73" height="44"/>
     </resources>
-    <classes>
-        <class className="JGSViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JGSViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="newBoardSelected:"/>
-                <relationship kind="action" name="resetPieces:"/>
-                <relationship kind="action" name="solveGame:"/>
-                <relationship kind="outlet" name="mainBoard" candidateClass="UIImageView"/>
-            </relationships>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

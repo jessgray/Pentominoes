@@ -21,6 +21,15 @@
 - (IBAction)solveGame:(id)sender;
 - (IBAction)resetPieces:(id)sender;
 
+@property (weak, nonatomic) IBOutlet UIButton *board1;
+@property (weak, nonatomic) IBOutlet UIButton *board2;
+@property (weak, nonatomic) IBOutlet UIButton *board3;
+@property (weak, nonatomic) IBOutlet UIButton *board4;
+@property (weak, nonatomic) IBOutlet UIButton *board5;
+@property (weak, nonatomic) IBOutlet UIButton *board6;
+@property (weak, nonatomic) IBOutlet UIButton *solveButton;
+
+
 @property NSUInteger currentBoard;
 @property (nonatomic, strong) NSMutableArray *boardPieces;
 @property (nonatomic, strong) NSArray *boardPieceLetters;
@@ -82,11 +91,14 @@
     
     NSString *newBoardImage = [NSString stringWithFormat:@"Board%i.png", self.currentBoard];
     self.mainBoard.image = [UIImage imageNamed:newBoardImage];
+
 }
 
 - (IBAction)solveGame:(id)sender {
     
     if(self.currentBoard != 0) {
+        [self disableBoardButtons];
+        
         NSUInteger boardPieceIndex = 0;
         NSDictionary *thisSolution = [self.solutions objectAtIndex:self.currentBoard-1];
         
@@ -120,11 +132,29 @@
                 [self.mainBoard addSubview:currentPiece];
             }];
             
-            
-            
             boardPieceIndex++;
         }
     }
+}
+
+-(void)disableBoardButtons {
+    self.board1.enabled = NO;
+    self.board2.enabled = NO;
+    self.board3.enabled = NO;
+    self.board4.enabled = NO;
+    self.board5.enabled = NO;
+    self.board6.enabled = NO;
+    self.solveButton.enabled = NO;
+}
+
+-(void)enableBoardButtons {
+    self.board1.enabled = YES;
+    self.board2.enabled = YES;
+    self.board3.enabled = YES;
+    self.board4.enabled = YES;
+    self.board5.enabled = YES;
+    self.board6.enabled = YES;
+    self.solveButton.enabled = YES;
 }
 
 -(void)movePiecesToDefaultPosition {
@@ -163,6 +193,8 @@
 }
 
 - (IBAction)resetPieces:(id)sender {
+    
+    [self enableBoardButtons];
     
     [UIImageView animateWithDuration:kAnimationTransition animations:^{
         
