@@ -12,7 +12,7 @@
 #define kColumnSpaceBetweenPieces 20
 #define kRowSpaceBetweenPieces 50
 #define kSideOfSquare 30
-#define kAnimationTransition 0.5
+#define kAnimationTransition 1.5
 
 
 @interface JGSViewController ()
@@ -56,10 +56,6 @@
 
 }
 
--(void)movePiecesToDefaultPosition {
-    
-}
-
 -(void)viewDidAppear:(BOOL)animated {
     CGSize screenSize = self.view.bounds.size;
     CGSize boardSize = self.mainBoard.bounds.size;
@@ -71,7 +67,7 @@
     // Add pieces to the game board
     [self.view addSubview:self.piecesContainer];
     
-    [self movePiecesToOriginalArea];
+    [self movePiecesToDefaultPosition];
 }
 
 - (void)didReceiveMemoryWarning
@@ -107,9 +103,8 @@
             numRotations = [[currentSolution valueForKey:@"rotations"] integerValue];
             numFlips = [[currentSolution valueForKey:@"flips"] integerValue];
             
-            [currentPiece convertPoint:CGPointMake(xCoord, yCoord) toView:self.mainBoard];
-            [self.mainBoard addSubview:currentPiece];
-            
+            CGPoint origin = [[currentPiece superview] convertPoint:currentPiece.frame.origin toView:self.mainBoard];
+            [currentPiece setFrame: CGRectMake(origin.x, origin.y, currentPiece.frame.size.width, currentPiece.frame.size.height)];
             
             [UIView animateWithDuration:kAnimationTransition animations:^{
                 // Apply rotations and flips
@@ -122,6 +117,7 @@
                 
                 // Put piece onto the game board
                 [currentPiece setFrame:CGRectMake(xCoord, yCoord, currentPiece.frame.size.width, currentPiece.frame.size.height)];
+                [self.mainBoard addSubview:currentPiece];
             }];
             
             
@@ -131,7 +127,7 @@
     }
 }
 
--(void)movePiecesToOriginalArea {
+-(void)movePiecesToDefaultPosition {
     CGSize screenSize = self.view.bounds.size;
     CGFloat xCoord = 0.0;
     CGFloat yCoord = 0.0;
@@ -154,6 +150,9 @@
             
         }
         
+        CGPoint origin = [[piece superview] convertPoint:piece.frame.origin toView:self.piecesContainer];
+        [piece setFrame: CGRectMake(origin.x, origin.y, piece.frame.size.width, piece.frame.size.height)];
+        
         // Create a frame for the piece and add the piece to the piece container
         CGRect pieceFrame = CGRectMake(xCoord, yCoord, pieceSize.width, pieceSize.height);
         [self.piecesContainer addSubview:piece];
@@ -173,7 +172,7 @@
         }
         
         // Move pieces back to the original area
-        [self movePiecesToOriginalArea];
+        [self movePiecesToDefaultPosition];
         
     }];
     
