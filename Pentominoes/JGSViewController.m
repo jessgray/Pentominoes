@@ -7,6 +7,9 @@
 //
 
 #import "JGSViewController.h"
+#import "JGSModel.m"
+#import "JGSView.m"
+
 #define kSpaceBelowMainBoard 50
 #define kEdgeMargin 100
 #define kColumnSpaceBetweenPieces 20
@@ -97,7 +100,7 @@
 - (IBAction)solveGame:(id)sender {
     
     if(self.currentBoard != 0) {
-        [self disableBoardButtons];
+        [self toggleBoardButtons:NO];
         
         NSUInteger boardPieceIndex = 0;
         NSDictionary *thisSolution = [self.solutions objectAtIndex:self.currentBoard-1];
@@ -137,24 +140,22 @@
     }
 }
 
--(void)disableBoardButtons {
-    self.board1.enabled = NO;
-    self.board2.enabled = NO;
-    self.board3.enabled = NO;
-    self.board4.enabled = NO;
-    self.board5.enabled = NO;
-    self.board6.enabled = NO;
-    self.solveButton.enabled = NO;
+-(void)toggleBoardButtons: (BOOL)enable {
+
+        self.board1.enabled = enable;
+        self.board2.enabled = enable;
+        self.board3.enabled = enable;
+        self.board4.enabled = enable;
+        self.board5.enabled = enable;
+        self.board6.enabled = enable;
+        self.solveButton.enabled = enable;
 }
 
--(void)enableBoardButtons {
-    self.board1.enabled = YES;
-    self.board2.enabled = YES;
-    self.board3.enabled = YES;
-    self.board4.enabled = YES;
-    self.board5.enabled = YES;
-    self.board6.enabled = YES;
-    self.solveButton.enabled = YES;
+// Handle rotations of the UI
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    
+    [self movePiecesToDefaultPosition];
+    
 }
 
 -(void)movePiecesToDefaultPosition {
@@ -194,7 +195,7 @@
 
 - (IBAction)resetPieces:(id)sender {
     
-    [self enableBoardButtons];
+    [self toggleBoardButtons:YES];
     
     [UIImageView animateWithDuration:kAnimationTransition animations:^{
         

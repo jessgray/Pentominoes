@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E1235CA17EA6DBC00B26DFE /* JGSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1235C917EA6DBC00B26DFE /* JGSModel.m */; };
+		1E1235CD17EB89D200B26DFE /* JGSView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1235CC17EB89D200B26DFE /* JGSView.m */; };
 		1E54EDCA17DCB8E100451519 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E54EDC917DCB8E100451519 /* UIKit.framework */; };
 		1E54EDCC17DCB8E100451519 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E54EDCB17DCB8E100451519 /* Foundation.framework */; };
 		1E54EDCE17DCB8E100451519 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E54EDCD17DCB8E100451519 /* CoreGraphics.framework */; };
@@ -54,6 +56,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E1235C817EA6DBC00B26DFE /* JGSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGSModel.h; sourceTree = "<group>"; };
+		1E1235C917EA6DBC00B26DFE /* JGSModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGSModel.m; sourceTree = "<group>"; };
+		1E1235CB17EB89D200B26DFE /* JGSView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGSView.h; sourceTree = "<group>"; };
+		1E1235CC17EB89D200B26DFE /* JGSView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGSView.m; sourceTree = "<group>"; };
 		1E54EDC617DCB8E100451519 /* Pentominoes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pentominoes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E54EDC917DCB8E100451519 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		1E54EDCB17DCB8E100451519 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -162,6 +168,10 @@
 				1E54EDE417DCB8E100451519 /* JGSViewController.h */,
 				1E54EDE517DCB8E100451519 /* JGSViewController.m */,
 				1E54EDD017DCB8E100451519 /* Supporting Files */,
+				1E1235C817EA6DBC00B26DFE /* JGSModel.h */,
+				1E1235C917EA6DBC00B26DFE /* JGSModel.m */,
+				1E1235CB17EB89D200B26DFE /* JGSView.h */,
+				1E1235CC17EB89D200B26DFE /* JGSView.m */,
 			);
 			path = Pentominoes;
 			sourceTree = "<group>";
@@ -321,6 +331,8 @@
 				1E54EDD617DCB8E100451519 /* main.m in Sources */,
 				1E54EDDA17DCB8E100451519 /* JGSAppDelegate.m in Sources */,
 				1E54EDE617DCB8E100451519 /* JGSViewController.m in Sources */,
+				1E1235CA17EA6DBC00B26DFE /* JGSModel.m in Sources */,
+				1E1235CD17EB89D200B26DFE /* JGSView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
