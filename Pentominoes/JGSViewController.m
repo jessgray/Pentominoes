@@ -7,8 +7,7 @@
 //
 
 #import "JGSViewController.h"
-#import "JGSModel.m"
-#import "JGSView.m"
+#import "JGSModel.h"
 
 #define kSpaceBelowMainBoard 50
 #define kEdgeMargin 100
@@ -38,9 +37,21 @@
 @property (nonatomic, strong) NSArray *boardPieceLetters;
 @property (nonatomic, strong) NSArray *solutions;
 @property (nonatomic, strong) UIView *piecesContainer;
+
+@property (nonatomic, strong) JGSModel *model;
 @end
 
 @implementation JGSViewController
+
+
+-(id)initWithCoder:(NSCoder *)aDecoder{
+    self = [super initWithCoder:aDecoder];
+    if(self) {
+        _model = [[JGSModel alloc] init];
+    }
+    
+    return self;
+}
 
 - (void)viewDidLoad
 {

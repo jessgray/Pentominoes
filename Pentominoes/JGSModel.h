@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface JGSModel : NSObject
-
+-(NSArray*)getPieceImages;
 @end
