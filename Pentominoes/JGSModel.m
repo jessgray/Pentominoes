@@ -10,6 +10,8 @@
 
 @interface JGSModel ()
 @property (nonatomic, strong) NSArray *pieceImages;
+
+@property (nonatomic)  NSUInteger currentBoard;
 @end
 
 @implementation JGSModel
@@ -42,6 +44,23 @@
     
     return self.pieceImages;
 }
+
+-(UIImage*)getBoardImage: (NSUInteger)boardNumber {
+    NSString *boardImageName = [NSString stringWithFormat:@"Board%i.png", self.currentBoard];
+    UIImage *mainBoardImage = [UIImage imageNamed:boardImageName];
+    
+    return mainBoardImage;
+}
+
+-(NSUInteger)getCurrentBoard {
+    return self.currentBoard;
+}
+
+-(void)setCurrentBoard:(NSUInteger)currentBoard {
+    self.currentBoard = currentBoard;
+}
+
+
 
 @end
 

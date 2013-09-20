@@ -52,6 +52,7 @@
 		1E54EE3217E2AC3400451519 /* launch@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E54EE3017E2AC3300451519 /* launch@2x.png */; };
 		1E54EE3417E2AC3900451519 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E54EE3317E2AC3900451519 /* Default-Portrait@2x~ipad.png */; };
 		1E54EE3617E2AC3F00451519 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E54EE3517E2AC3F00451519 /* Default-Portrait~ipad.png */; };
+		1E80FC5717ECE1BE0050F473 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E80FC5617ECE1BE0050F473 /* InfoViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +109,8 @@
 		1E54EE3017E2AC3300451519 /* launch@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch@2x.png"; sourceTree = "<group>"; };
 		1E54EE3317E2AC3900451519 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		1E54EE3517E2AC3F00451519 /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
+		1E80FC5517ECE1BE0050F473 /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
+		1E80FC5617ECE1BE0050F473 /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,9 +167,11 @@
 				1E54EDE117DCB8E100451519 /* MainStoryboard.storyboard */,
 				1E54EDE417DCB8E100451519 /* JGSViewController.h */,
 				1E54EDE517DCB8E100451519 /* JGSViewController.m */,
-				1E54EDD017DCB8E100451519 /* Supporting Files */,
 				1E1235C817EA6DBC00B26DFE /* JGSModel.h */,
 				1E1235C917EA6DBC00B26DFE /* JGSModel.m */,
+				1E80FC5517ECE1BE0050F473 /* InfoViewController.h */,
+				1E80FC5617ECE1BE0050F473 /* InfoViewController.m */,
+				1E54EDD017DCB8E100451519 /* Supporting Files */,
 				1E54EDC717DCB8E100451519 /* Products */,
 			);
 			path = Pentominoes;
@@ -328,6 +333,7 @@
 				1E54EDDA17DCB8E100451519 /* JGSAppDelegate.m in Sources */,
 				1E54EDE617DCB8E100451519 /* JGSViewController.m in Sources */,
 				1E1235CA17EA6DBC00B26DFE /* JGSModel.m in Sources */,
+				1E80FC5717ECE1BE0050F473 /* InfoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

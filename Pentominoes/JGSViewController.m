@@ -7,6 +7,7 @@
 //
 
 #import "JGSViewController.h"
+#import "InfoViewController.h"
 #import "JGSModel.h"
 
 #define kSpaceBelowMainBoard 50
@@ -57,26 +58,111 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+
     
     self.boardPieces = [[NSMutableArray alloc] init];
     self.boardPieceLetters = [NSArray arrayWithObjects:@"F", @"I", @"L", @"N", @"P", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
     
+    NSArray *pieceImages = [_model getPieceImages];
+    
     // Create mutable array of board pieces that are each UIImageViews half the size of their corresponding UIImage
     for(NSUInteger i = 0; i < [self.boardPieceLetters count]; i++) {
         
-        UIImage *pieceImage = [UIImage imageNamed: [NSString stringWithFormat:@"tile%@.png", self.boardPieceLetters[i]]];
-        UIImageView *boardPiece = [[UIImageView alloc] initWithImage:pieceImage];
+        UIImageView *boardPiece = [[UIImageView alloc] initWithImage:pieceImages[i]];
         
-        CGSize pieceImageSize = pieceImage.size;
+        CGSize pieceImageSize = [pieceImages[i] size];
         boardPiece.frame = CGRectMake(0.0, 0.0, pieceImageSize.width/2, pieceImageSize.height/2);
         
+        boardPiece.userInteractionEnabled = YES;
         [self.boardPieces addObject:boardPiece];
     }
-
+    
+    
+    for (UIImageView *boardPiece in self.boardPieces) {
+        // Define gestures for each piece and apply them to the pieces
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
+        singleTap.numberOfTapsRequired = 1;
+        UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+        doubleTap.numberOfTapsRequired = 2;
+        
+        [singleTap requireGestureRecognizerToFail:doubleTap];
+        
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
+        
+        [boardPiece addGestureRecognizer:singleTap];
+        [boardPiece addGestureRecognizer:doubleTap];
+        [boardPiece addGestureRecognizer:pan];
+    }
+    
     // Create solutions array for use when the user clicks the "solve" button
     NSString *solutionsPath = [[NSBundle mainBundle] pathForResource:@"Solutions" ofType:@"plist"];
     self.solutions = [NSArray arrayWithContentsOfFile:solutionsPath];
 
+}
+
+#pragma mark Touches
+-(IBAction)handleSingleTap:(UITapGestureRecognizer *)sender {
+    if(sender.state == UIGestureRecognizerStateEnded){
+        [sender.view setTransform:CGAffineTransformRotate(sender.view.transform, M_PI_2)];
+        
+        // Snap piece to the grid if it's on the main board
+        if([sender.view isDescendantOfView:self.mainBoard]) {
+            [self snapPiece:sender.view];
+        }
+    }
+}
+
+-(IBAction)handleDoubleTap:(UITapGestureRecognizer *)sender {
+    if(sender.state == UIGestureRecognizerStateEnded){
+        [sender.view setTransform:CGAffineTransformScale(sender.view.transform, -1.0, 1.0)];
+    }
+}
+
+-(void)snapPiece:(UIView *)piece {
+    
+    NSInteger newX;
+    NSInteger newY;
+    CGPoint snap;
+    
+    // Snap piece to board
+    newX = ((NSInteger)piece.frame.origin.x)/kSideOfSquare;
+    newY = ((NSInteger)piece.frame.origin.y)/kSideOfSquare;
+    snap = CGPointMake(newX*kSideOfSquare, newY*kSideOfSquare);
+    
+    piece.frame = (CGRect){snap, piece.frame.size};
+}
+
+#pragma mark Pans
+-(IBAction)handlePan:(UIPanGestureRecognizer *)sender {
+    
+    UIView *piece = sender.view;
+    
+    switch(sender.state) {
+        case UIGestureRecognizerStateBegan:
+            // Change which view the piece belongs to and add it to the game board
+            piece.center = [sender locationInView:self.mainBoard];
+            
+            CGPoint origin = [[piece superview] convertPoint:piece.frame.origin toView:self.mainBoard];
+            [piece setFrame: CGRectMake(origin.x, origin.y, piece.frame.size.width, piece.frame.size.height)];
+            
+            [self.mainBoard addSubview:piece];
+            break;
+        case UIGestureRecognizerStateChanged:
+            // 
+            piece.center = [sender locationInView:self.mainBoard];
+            break;
+        case UIGestureRecognizerStateEnded:
+            
+            [self snapPiece:piece];
+            
+            // Snap piece to board
+            /*newX = ((NSInteger)piece.frame.origin.x)/kSideOfSquare;
+            newY = ((NSInteger)piece.frame.origin.y)/kSideOfSquare;
+            snap = CGPointMake(newX*kSideOfSquare, newY*kSideOfSquare);
+            
+            piece.frame = (CGRect){snap, piece.frame.size};*/
+            break;
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -86,6 +172,9 @@
     // Create a container to hold all of the pieces
     CGRect frame = CGRectMake(kEdgeMargin, boardSize.height+kSpaceBelowMainBoard, screenSize.width-kEdgeMargin, screenSize.height-kSpaceBelowMainBoard-boardSize.height);
     self.piecesContainer = [[UIImageView alloc] initWithFrame:frame];
+    
+    
+    self.piecesContainer.userInteractionEnabled = YES;
     
     // Add pieces to the game board
     [self.view addSubview:self.piecesContainer];
@@ -101,10 +190,12 @@
 
 - (IBAction)newBoardSelected:(id)sender {
     
-    self.currentBoard = [sender tag] - 1;
+    self.currentBoard = [sender tag] -1;
+
+    NSString *boardImageName = [NSString stringWithFormat:@"Board%i.png", self.currentBoard];
+    UIImage *mainBoardImage = [UIImage imageNamed:boardImageName];
     
-    NSString *newBoardImage = [NSString stringWithFormat:@"Board%i.png", self.currentBoard];
-    self.mainBoard.image = [UIImage imageNamed:newBoardImage];
+    self.mainBoard.image = mainBoardImage;
 
 }
 
@@ -201,6 +292,14 @@
         [piece setFrame:pieceFrame];
         
         xCoord += pieceFrame.size.width + kColumnSpaceBetweenPieces;
+    }
+}
+
+#pragma mark - Segues
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if([segue.identifier isEqualToString:@"InfoSegue"]) {
+        InfoViewController *infoViewController = segue.destinationViewController;
     }
 }
 

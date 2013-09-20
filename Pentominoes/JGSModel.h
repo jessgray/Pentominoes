@@ -10,4 +10,8 @@
 
 @interface JGSModel : NSObject
 -(NSArray*)getPieceImages;
+-(UIImage*)getBoardImage: (NSUInteger)boardNumber;
+-(NSUInteger)getCurrentBoard;
+
+-(void)setCurrentBoard: (NSUInteger)currentBoard;
 @end
