@@ -17,6 +17,7 @@
 #define kRowSpaceBetweenPieces 50
 #define kSideOfSquare 30
 #define kAnimationTransition 1.5
+#define kSnapTransition 0.3
 
 
 @interface JGSViewController ()
@@ -141,14 +142,11 @@
 
 -(BOOL)isPieceOverGameBoard:(UIView *)piece {
     
-    NSLog(@"Piece center, x: %f & y: %f", piece.center.x, piece.center.y);
-    NSLog(@"Piece frame, x: %f & y: %f", piece.frame.origin.x, piece.frame.origin.y);
-    NSLog(@"Board frame: x: %f & y: %f", self.mainBoard.frame.origin.x, self.mainBoard.frame.origin.y);
     
-    if((piece.center.x > self.mainBoard.frame.origin.x &&
-        piece.center.x < (self.mainBoard.frame.origin.x + self.mainBoard.frame.size.width)) &&
-       (piece.center.y > self.mainBoard.frame.origin.y &&
-        piece.center.y < (self.mainBoard.frame.origin.y + self.mainBoard.frame.size.height))) {
+    // Note: piece is in coordinate system of self.mainBoard, but mainBoard is in coordinate system of self.view. Simply
+    // need to compare coordinates of piece to dimensions of the board. 
+    if((piece.center.x > 0 && piece.center.x < self.mainBoard.frame.size.width) &&
+       (piece.center.y > 0 && piece.center.y < self.mainBoard.frame.size.height)) {
         return YES;
     } else {
         return NO;
@@ -159,13 +157,12 @@
 -(IBAction)handlePan:(UIPanGestureRecognizer *)sender {
     
     UIView *piece = sender.view;
-
-    NSLog(@"Piece is over game board? %s", [self isPieceOverGameBoard:piece] ? "true" : "false");
     
     switch(sender.state) {
         case UIGestureRecognizerStateBegan:
             
-            // Change which view the piece belongs to and add it to the game board
+            // Convert coordinates of piece to belong the the game board so the piece doesn't jump around while
+            // moving
             piece.center = [sender locationInView:self.mainBoard];
                 
             CGPoint origin = [[piece superview] convertPoint:piece.frame.origin toView:self.mainBoard];
@@ -176,20 +173,24 @@
             break;
         case UIGestureRecognizerStateChanged:
 
+            // Keep moving the piece in relation to the game board 
             piece.center = [sender locationInView:self.mainBoard];
             
             break;
         case UIGestureRecognizerStateEnded:
             
+            // If the piece is no longer over the game board, move it to the main view so it can be picked back up.
+            // Otherwise, snap the piece to the board. 
             if(![self isPieceOverGameBoard:piece]) {
                 piece.center = [sender locationInView:self.view];
                 [self.view addSubview:piece];
             } else {
-                [self snapPiece:piece];
+                
+                [UIView animateWithDuration:kSnapTransition animations:^{
+                    [self snapPiece:piece];
+                }];
+                
             }
-            
-            
-            
             break;
     }
 }
