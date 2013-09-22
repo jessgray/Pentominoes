@@ -9,6 +9,7 @@
 #import "JGSViewController.h"
 #import "InfoViewController.h"
 #import "JGSModel.h"
+#import <math.h>
 
 #define kSpaceBelowMainBoard 50
 #define kEdgeMargin 100
@@ -34,10 +35,13 @@
 
 
 @property NSUInteger currentBoard;
+@property NSInteger numPiecesOnBoard;
 @property (nonatomic, strong) NSMutableArray *boardPieces;
 @property (nonatomic, strong) NSArray *boardPieceLetters;
 @property (nonatomic, strong) NSArray *solutions;
 @property (nonatomic, strong) UIView *piecesContainer;
+
+-(IBAction)unwindSegue:(UIStoryboardSegue*)segue;
 
 @property (nonatomic, strong) JGSModel *model;
 @end
@@ -118,49 +122,74 @@
     }
 }
 
+// Snap a piece to the main game board
 -(void)snapPiece:(UIView *)piece {
+
+    // Round off coordinates of the piece to the nearest integer, then calculate where
+    // to place the piece on the board
+    CGFloat oldX = piece.frame.origin.x/kSideOfSquare;
+    CGFloat oldY = piece.frame.origin.y/kSideOfSquare;
     
-    NSInteger newX;
-    NSInteger newY;
-    CGPoint snap;
+    CGFloat roundedX = roundf(oldX);
+    CGFloat roundedY = roundf(oldY);
     
-    // Snap piece to board
-    newX = ((NSInteger)piece.frame.origin.x)/kSideOfSquare;
-    newY = ((NSInteger)piece.frame.origin.y)/kSideOfSquare;
-    snap = CGPointMake(newX*kSideOfSquare, newY*kSideOfSquare);
+    CGPoint snap = CGPointMake(((NSInteger)roundedX)*kSideOfSquare, ((NSInteger)roundedY)*kSideOfSquare);
     
+    // Snap piece to nearest grid on the board
     piece.frame = (CGRect){snap, piece.frame.size};
+}
+
+-(BOOL)isPieceOverGameBoard:(UIView *)piece {
+    
+    NSLog(@"Piece center, x: %f & y: %f", piece.center.x, piece.center.y);
+    NSLog(@"Piece frame, x: %f & y: %f", piece.frame.origin.x, piece.frame.origin.y);
+    NSLog(@"Board frame: x: %f & y: %f", self.mainBoard.frame.origin.x, self.mainBoard.frame.origin.y);
+    
+    if((piece.center.x > self.mainBoard.frame.origin.x &&
+        piece.center.x < (self.mainBoard.frame.origin.x + self.mainBoard.frame.size.width)) &&
+       (piece.center.y > self.mainBoard.frame.origin.y &&
+        piece.center.y < (self.mainBoard.frame.origin.y + self.mainBoard.frame.size.height))) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 #pragma mark Pans
 -(IBAction)handlePan:(UIPanGestureRecognizer *)sender {
     
     UIView *piece = sender.view;
+
+    NSLog(@"Piece is over game board? %s", [self isPieceOverGameBoard:piece] ? "true" : "false");
     
     switch(sender.state) {
         case UIGestureRecognizerStateBegan:
+            
             // Change which view the piece belongs to and add it to the game board
             piece.center = [sender locationInView:self.mainBoard];
-            
+                
             CGPoint origin = [[piece superview] convertPoint:piece.frame.origin toView:self.mainBoard];
             [piece setFrame: CGRectMake(origin.x, origin.y, piece.frame.size.width, piece.frame.size.height)];
-            
+                
             [self.mainBoard addSubview:piece];
+            
             break;
         case UIGestureRecognizerStateChanged:
-            // 
+
             piece.center = [sender locationInView:self.mainBoard];
+            
             break;
         case UIGestureRecognizerStateEnded:
             
-            [self snapPiece:piece];
+            if(![self isPieceOverGameBoard:piece]) {
+                piece.center = [sender locationInView:self.view];
+                [self.view addSubview:piece];
+            } else {
+                [self snapPiece:piece];
+            }
             
-            // Snap piece to board
-            /*newX = ((NSInteger)piece.frame.origin.x)/kSideOfSquare;
-            newY = ((NSInteger)piece.frame.origin.y)/kSideOfSquare;
-            snap = CGPointMake(newX*kSideOfSquare, newY*kSideOfSquare);
             
-            piece.frame = (CGRect){snap, piece.frame.size};*/
+            
             break;
     }
 }
@@ -295,12 +324,24 @@
     }
 }
 
+#pragma mark - Info Delegate
+-(void)dismissMe {
+    [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+
 #pragma mark - Segues
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
     if([segue.identifier isEqualToString:@"InfoSegue"]) {
         InfoViewController *infoViewController = segue.destinationViewController;
+        infoViewController.delegate = self;
     }
+}
+
+-(IBAction)unwindSegue:(UIStoryboardSegue *)segue {
+    
 }
 
 - (IBAction)resetPieces:(id)sender {

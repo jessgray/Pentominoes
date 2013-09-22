@@ -1,5 +1,5 @@
 //
-//  InfoViewController.h
+//  JGSInfoViewController.h
 //  Pentominoes
 //
 //  Created by Jessica Smith on 9/21/13.
@@ -14,6 +14,6 @@
 
 @end
 
-@interface InfoViewController : UIViewController
+@interface JGSInfoViewController : NSObject
 @property (nonatomic, weak) id<InfoDelegate> delegate;
 @end

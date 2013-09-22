@@ -2,7 +2,7 @@
 //  InfoViewController.m
 //  Pentominoes
 //
-//  Created by Jessica Smith on 9/20/13.
+//  Created by Jessica Smith on 9/21/13.
 //  Copyright (c) 2013 Jessica Smith. All rights reserved.
 //
 
@@ -14,13 +14,12 @@
 
 @end
 
-
 @implementation InfoViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.infoLabel.text = @"Pentominoes is awesome!";
+    self.infoLabel.text = @"Pentominoes is an awesome game!";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -29,5 +28,6 @@
 
 - (IBAction)dismissPressed:(id)sender {
     [self.delegate dismissMe];
+    
 }
 @end
