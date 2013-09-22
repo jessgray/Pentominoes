@@ -9,6 +9,7 @@
 #import "JGSViewController.h"
 #import "InfoViewController.h"
 #import "JGSModel.h"
+#import "UIPieceImageView.h"
 #import <math.h>
 
 #define kSpaceBelowMainBoard 50
@@ -18,6 +19,7 @@
 #define kSideOfSquare 30
 #define kAnimationTransition 1.5
 #define kSnapTransition 0.3
+#define kPieceScale 0.8
 
 
 @interface JGSViewController ()
@@ -70,10 +72,10 @@
     
     NSArray *pieceImages = [_model getPieceImages];
     
-    // Create mutable array of board pieces that are each UIImageViews half the size of their corresponding UIImage
+    // Create mutable array of board pieces that are each UIPieceImageViews half the size of their corresponding UIImage
     for(NSUInteger i = 0; i < [self.boardPieceLetters count]; i++) {
         
-        UIImageView *boardPiece = [[UIImageView alloc] initWithImage:pieceImages[i]];
+        UIPieceImageView *boardPiece = [[UIPieceImageView alloc] initWithImage:pieceImages[i]];
         
         CGSize pieceImageSize = [pieceImages[i] size];
         boardPiece.frame = CGRectMake(0.0, 0.0, pieceImageSize.width/2, pieceImageSize.height/2);
@@ -83,7 +85,7 @@
     }
     
     
-    for (UIImageView *boardPiece in self.boardPieces) {
+    for (UIPieceImageView *boardPiece in self.boardPieces) {
         // Define gestures for each piece and apply them to the pieces
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
         singleTap.numberOfTapsRequired = 1;
@@ -105,27 +107,55 @@
 
 }
 
-#pragma mark Touches
+#pragma mark - Touches
 -(IBAction)handleSingleTap:(UITapGestureRecognizer *)sender {
+    
+    UIPieceImageView *piece = (UIPieceImageView *)sender.view;
+    
     if(sender.state == UIGestureRecognizerStateEnded){
-        [sender.view setTransform:CGAffineTransformRotate(sender.view.transform, M_PI_2)];
+        
+        [piece increaseRotations];
+        
+        // If piece has been flipped, need to make rotation direction -1 in order to keep clockwise rotation
+        NSInteger rotationDirection = ([piece getNumFlips] == 1) ? -1 : 1;
+        
+        // Animate rotation 90 degrees clockwise
+        [UIView animateWithDuration:kSnapTransition animations:^{
+            [piece setTransform:CGAffineTransformRotate(piece.transform, rotationDirection*M_PI_2)];
+        }];
         
         // Snap piece to the grid if it's on the main board
-        if([sender.view isDescendantOfView:self.mainBoard]) {
-            [self snapPiece:sender.view];
+        if([piece isDescendantOfView:self.mainBoard]) {
+            [self snapPiece:piece];
         }
     }
 }
 
 -(IBAction)handleDoubleTap:(UITapGestureRecognizer *)sender {
+    
+    UIPieceImageView *piece = (UIPieceImageView *)sender.view;
+    
     if(sender.state == UIGestureRecognizerStateEnded){
-        [sender.view setTransform:CGAffineTransformScale(sender.view.transform, -1.0, 1.0)];
+        
+        // If image has been rotated an odd number of times, flip needs to use 1 for x and -1 for y to keep
+        // flips consistent
+        
+        CGFloat flipX = ([piece getNumRotations] %2 == 0) ? -1.0 : 1.0;
+        CGFloat flipY = -1*flipX;
+        
+        [piece increaseFlips];
+        
+        // Animate flip
+        [UIView animateWithDuration:kSnapTransition animations:^{
+            [piece setTransform:CGAffineTransformScale(piece.transform, flipX, flipY)];
+        }];
+        
     }
 }
 
 // Snap a piece to the main game board
--(void)snapPiece:(UIView *)piece {
-
+-(void)snapPiece:(UIPieceImageView *)piece {
+    
     // Round off coordinates of the piece to the nearest integer, then calculate where
     // to place the piece on the board
     CGFloat oldX = piece.frame.origin.x/kSideOfSquare;
@@ -153,10 +183,10 @@
     }
 }
 
-#pragma mark Pans
+#pragma mark - Pans
 -(IBAction)handlePan:(UIPanGestureRecognizer *)sender {
     
-    UIView *piece = sender.view;
+    UIPieceImageView *piece = (UIPieceImageView *)sender.view;
     
     switch(sender.state) {
         case UIGestureRecognizerStateBegan:
@@ -170,6 +200,9 @@
                 
             [self.mainBoard addSubview:piece];
             
+            // Shrink piece when it begins to move
+            [self applyTransformWithAnimation:piece withScale:kPieceScale];
+            
             break;
         case UIGestureRecognizerStateChanged:
 
@@ -178,6 +211,8 @@
             
             break;
         case UIGestureRecognizerStateEnded:
+            // Unshrink piece once it stops moving
+            [self applyTransformWithAnimation:piece withScale:1/kPieceScale];
             
             // If the piece is no longer over the game board, move it to the main view so it can be picked back up.
             // Otherwise, snap the piece to the board. 
@@ -185,14 +220,29 @@
                 piece.center = [sender locationInView:self.view];
                 [self.view addSubview:piece];
             } else {
-                
                 [UIView animateWithDuration:kSnapTransition animations:^{
                     [self snapPiece:piece];
                 }];
-                
             }
             break;
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateFailed:
+        default:
+            
+            [self returnPieceToOriginalSpot:piece];
+            break;
     }
+}
+
+- (void)applyTransformWithAnimation: (UIPieceImageView *)piece withScale: (CGFloat)scaleRatio {
+    
+    [piece setNewFrame:piece.frame];
+    
+    [UIView animateWithDuration:kSnapTransition animations:^{
+        [piece setTransform:CGAffineTransformScale(piece.transform, scaleRatio, scaleRatio)];
+    }];
+    
+    piece.frame = [piece getFrame];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -242,7 +292,7 @@
             
             NSDictionary *currentSolution = [thisSolution valueForKey:key];
             NSInteger xCoord, yCoord, numRotations, numFlips;
-            UIImageView *currentPiece = [self.boardPieces objectAtIndex:boardPieceIndex];
+            UIPieceImageView *currentPiece = [self.boardPieces objectAtIndex:boardPieceIndex];
             
             // Get values from the solution
             xCoord = [[currentSolution valueForKey:@"x"] integerValue]*kSideOfSquare;
@@ -290,6 +340,14 @@
     
 }
 
+- (void)returnPieceToOriginalSpot: (UIPieceImageView *)piece {
+    
+    [UIView animateWithDuration:kAnimationTransition animations:^{
+        [piece setFrame:[piece getOriginalFrame]];
+    }];
+    
+}
+
 -(void)movePiecesToDefaultPosition {
     CGSize screenSize = self.view.bounds.size;
     CGFloat xCoord = 0.0;
@@ -297,7 +355,7 @@
     CGFloat largestHeight = 0.0;
     
     // Place each piece into the container, spacing them appropriately
-    for (UIImageView *piece in self.boardPieces) {
+    for (UIPieceImageView *piece in self.boardPieces) {
         CGSize pieceSize = piece.bounds.size;
         
         if(pieceSize.height > largestHeight) {
@@ -320,6 +378,8 @@
         CGRect pieceFrame = CGRectMake(xCoord, yCoord, pieceSize.width, pieceSize.height);
         [self.piecesContainer addSubview:piece];
         [piece setFrame:pieceFrame];
+        
+        [piece setOriginalFrame:piece.frame];
         
         xCoord += pieceFrame.size.width + kColumnSpaceBetweenPieces;
     }
@@ -352,7 +412,7 @@
     [UIImageView animateWithDuration:kAnimationTransition animations:^{
         
         // Undo any transforms applied to pieces
-        for (UIImageView *piece in self.boardPieces) {
+        for (UIPieceImageView *piece in self.boardPieces) {
             piece.transform = CGAffineTransformIdentity;
         }
         
