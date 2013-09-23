@@ -38,10 +38,7 @@
 
 
 @property NSUInteger currentBoard;
-@property NSInteger numPiecesOnBoard;
 @property (nonatomic, strong) NSMutableArray *boardPieces;
-@property (nonatomic, strong) NSArray *boardPieceLetters;
-@property (nonatomic, strong) NSArray *solutions;
 @property (nonatomic, strong) UIView *piecesContainer;
 
 -(IBAction)unwindSegue:(UIStoryboardSegue*)segue;
@@ -65,15 +62,13 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-
     
     self.boardPieces = [[NSMutableArray alloc] init];
-    self.boardPieceLetters = [NSArray arrayWithObjects:@"F", @"I", @"L", @"N", @"P", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
     
     NSArray *pieceImages = [_model getPieceImages];
     
     // Create mutable array of board pieces that are each UIPieceImageViews half the size of their corresponding UIImage
-    for(NSUInteger i = 0; i < [self.boardPieceLetters count]; i++) {
+    for(NSUInteger i = 0; i < [[_model getBoardPieceLetters] count]; i++) {
         
         UIPieceImageView *boardPiece = [[UIPieceImageView alloc] initWithImage:pieceImages[i]];
         
@@ -84,11 +79,10 @@
         [self.boardPieces addObject:boardPiece];
     }
     
-    
+    // Define gestures for each piece and apply them to the pieces
     for (UIPieceImageView *boardPiece in self.boardPieces) {
-        // Define gestures for each piece and apply them to the pieces
+        
         UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
-        singleTap.numberOfTapsRequired = 1;
         UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
         doubleTap.numberOfTapsRequired = 2;
         
@@ -100,11 +94,6 @@
         [boardPiece addGestureRecognizer:doubleTap];
         [boardPiece addGestureRecognizer:pan];
     }
-    
-    // Create solutions array for use when the user clicks the "solve" button
-    NSString *solutionsPath = [[NSBundle mainBundle] pathForResource:@"Solutions" ofType:@"plist"];
-    self.solutions = [NSArray arrayWithContentsOfFile:solutionsPath];
-
 }
 
 #pragma mark - Touches
@@ -271,12 +260,7 @@
 - (IBAction)newBoardSelected:(id)sender {
     
     self.currentBoard = [sender tag] -1;
-
-    NSString *boardImageName = [NSString stringWithFormat:@"Board%i.png", self.currentBoard];
-    UIImage *mainBoardImage = [UIImage imageNamed:boardImageName];
-    
-    self.mainBoard.image = mainBoardImage;
-
+    self.mainBoard.image = [_model getBoardImage:[sender tag] -1];
 }
 
 - (IBAction)solveGame:(id)sender {
@@ -285,12 +269,11 @@
         [self toggleBoardButtons:NO];
         
         NSUInteger boardPieceIndex = 0;
-        NSDictionary *thisSolution = [self.solutions objectAtIndex:self.currentBoard-1];
         
         // Move each piece onto the game board in the correct position
-        for (NSString *key in self.boardPieceLetters) {
+        for (NSString *key in [_model getBoardPieceLetters]) {
             
-            NSDictionary *currentSolution = [thisSolution valueForKey:key];
+            NSDictionary *currentSolution = [_model getSolutionForPiece:key onBoard:self.currentBoard-1];
             NSInteger xCoord, yCoord, numRotations, numFlips;
             UIPieceImageView *currentPiece = [self.boardPieces objectAtIndex:boardPieceIndex];
             
@@ -322,6 +305,7 @@
     }
 }
 
+// Toggle board selectors on/off
 -(void)toggleBoardButtons: (BOOL)enable {
 
         self.board1.enabled = enable;
@@ -336,10 +320,16 @@
 // Handle rotations of the UI
 -(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     
-    [self movePiecesToDefaultPosition];
+    [self toggleBoardButtons:YES];
+    
+    [UIView animateWithDuration:kAnimationTransition animations:^{
+        [self movePiecesToDefaultPosition];
+    }];
+    
     
 }
 
+// Move one piece back to its original position
 - (void)returnPieceToOriginalSpot: (UIPieceImageView *)piece {
     
     [UIView animateWithDuration:kAnimationTransition animations:^{
@@ -348,11 +338,17 @@
     
 }
 
+// Move all pieces back to the original playing positions
 -(void)movePiecesToDefaultPosition {
     CGSize screenSize = self.view.bounds.size;
     CGFloat xCoord = 0.0;
     CGFloat yCoord = 0.0;
     CGFloat largestHeight = 0.0;
+    
+    // Undo any transforms applied to pieces
+    for (UIPieceImageView *piece in self.boardPieces) {
+        piece.transform = CGAffineTransformIdentity;
+    }
     
     // Place each piece into the container, spacing them appropriately
     for (UIPieceImageView *piece in self.boardPieces) {
@@ -410,12 +406,6 @@
     [self toggleBoardButtons:YES];
     
     [UIImageView animateWithDuration:kAnimationTransition animations:^{
-        
-        // Undo any transforms applied to pieces
-        for (UIPieceImageView *piece in self.boardPieces) {
-            piece.transform = CGAffineTransformIdentity;
-        }
-        
         // Move pieces back to the original area
         [self movePiecesToDefaultPosition];
         

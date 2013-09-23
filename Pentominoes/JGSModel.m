@@ -9,9 +9,10 @@
 #import "JGSModel.h"
 
 @interface JGSModel ()
+@property (nonatomic, strong) NSArray *boardPieceLetters;
 @property (nonatomic, strong) NSArray *pieceImages;
+@property (nonatomic, strong) NSArray *solutions;
 
-@property (nonatomic)  NSUInteger currentBoard;
 @end
 
 @implementation JGSModel
@@ -19,45 +20,58 @@
 -(id)init {
     self = [super init];
     if(self) {
-        _pieceImages = [self getPieceImages];
+        [self initPieces];
+        [self initSolutions];
     }
-    
     return self;
 }
 
--(NSArray*)getPieceImages {
-    
+- (void)initPieces {
     // Define all pieces represented by letters
-    NSArray *boardPieceLetters = [NSArray arrayWithObjects:@"F", @"I", @"L", @"N", @"P", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
+    self.boardPieceLetters = [NSArray arrayWithObjects:@"F", @"I", @"L", @"N", @"P", @"T", @"U", @"V", @"W", @"X", @"Y", @"Z", nil];
     NSMutableArray *tempImages = [[NSMutableArray alloc] init];
     
     // Create mutable array of of UIImages that represent each game piece
-    for(NSUInteger i = 0; i < [boardPieceLetters count]; i++) {
+    for(NSUInteger i = 0; i < [self.boardPieceLetters count]; i++) {
         
-        UIImage *pieceImage = [UIImage imageNamed: [NSString stringWithFormat:@"tile%@.png", boardPieceLetters[i]]];
+        UIImage *pieceImage = [UIImage imageNamed: [NSString stringWithFormat:@"tile%@.png", self.boardPieceLetters[i]]];
         
         [tempImages addObject:pieceImage];
     }
     
     // Make the mutable array immutable
     self.pieceImages = [NSArray arrayWithArray:tempImages];
+}
+
+- (void)initSolutions {
+    // Create solutions array for use when the user clicks the "solve" button
+    NSString *solutionsPath = [[NSBundle mainBundle] pathForResource:@"Solutions" ofType:@"plist"];
+    self.solutions = [NSArray arrayWithContentsOfFile:solutionsPath];
+}
+
+-(NSArray*)getPieceImages {
     
     return self.pieceImages;
 }
 
+- (NSArray *)getBoardPieceLetters {
+    return self.boardPieceLetters;
+}
+
+- (NSArray *)getSolutions {
+    return self.solutions;
+}
+
+- (NSDictionary *)getSolutionForPiece:(NSString*)piece onBoard:(NSUInteger)board {
+    NSDictionary *solution  = [[self.solutions objectAtIndex:board] valueForKey:piece];
+    return solution;
+}
+
 -(UIImage*)getBoardImage: (NSUInteger)boardNumber {
-    NSString *boardImageName = [NSString stringWithFormat:@"Board%i.png", self.currentBoard];
+    NSString *boardImageName = [NSString stringWithFormat:@"Board%i.png", boardNumber];
     UIImage *mainBoardImage = [UIImage imageNamed:boardImageName];
     
     return mainBoardImage;
-}
-
--(NSUInteger)getCurrentBoard {
-    return self.currentBoard;
-}
-
--(void)setCurrentBoard:(NSUInteger)currentBoard {
-    self.currentBoard = currentBoard;
 }
 
 

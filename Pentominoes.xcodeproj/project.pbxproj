@@ -54,6 +54,7 @@
 		1E54EE3617E2AC3F00451519 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E54EE3517E2AC3F00451519 /* Default-Portrait~ipad.png */; };
 		1EB9E0E617EE612200891665 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9E0E517EE612200891665 /* InfoViewController.m */; };
 		1EB9E0EC17EFA07C00891665 /* UIPieceImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9E0EB17EFA07C00891665 /* UIPieceImageView.m */; };
+		1EB9E0EE17EFBB8200891665 /* largeButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9E0ED17EFBB8200891665 /* largeButton.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -114,6 +115,7 @@
 		1EB9E0E517EE612200891665 /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
 		1EB9E0EA17EFA07C00891665 /* UIPieceImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPieceImageView.h; sourceTree = "<group>"; };
 		1EB9E0EB17EFA07C00891665 /* UIPieceImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPieceImageView.m; sourceTree = "<group>"; };
+		1EB9E0ED17EFBB8200891665 /* largeButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = largeButton.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +201,7 @@
 		1E54EDEC17DCBA4D00451519 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				1EB9E0ED17EFBB8200891665 /* largeButton.png */,
 				1E54EE2F17E2AC3300451519 /* launch.png */,
 				1E54EE3017E2AC3300451519 /* launch@2x.png */,
 				1E54EE2717E2A90E00451519 /* icon.png */,
@@ -324,6 +327,7 @@
 				1E54EE3217E2AC3400451519 /* launch@2x.png in Resources */,
 				1E54EE3417E2AC3900451519 /* Default-Portrait@2x~ipad.png in Resources */,
 				1E54EE3617E2AC3F00451519 /* Default-Portrait~ipad.png in Resources */,
+				1EB9E0EE17EFBB8200891665 /* largeButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

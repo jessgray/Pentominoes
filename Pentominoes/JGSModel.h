@@ -9,9 +9,13 @@
 #import <Foundation/Foundation.h>
 
 @interface JGSModel : NSObject
--(NSArray*)getPieceImages;
--(UIImage*)getBoardImage: (NSUInteger)boardNumber;
--(NSUInteger)getCurrentBoard;
+- (void)initPieces;
+- (void)initSolutions;
 
--(void)setCurrentBoard: (NSUInteger)currentBoard;
+-(NSArray*)getPieceImages;
+- (NSArray *)getBoardPieceLetters;
+- (NSArray *)getSolutions;
+- (NSDictionary *)getSolutionForPiece:(NSString*)piece onBoard:(NSUInteger)board;
+-(UIImage*)getBoardImage: (NSUInteger)boardNumber;
+
 @end

@@ -9,6 +9,7 @@
 #import "InfoViewController.h"
 
 @interface InfoViewController ()
+
 @property (weak, nonatomic) IBOutlet UILabel *infoLabel;
 - (IBAction)dismissPressed:(id)sender;
 
@@ -19,7 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.infoLabel.text = @"Pentominoes is an awesome game!";
+    self.infoLabel.text = @"This version of Pentominoes was made by Jessie Smith. Enjoy!";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -30,4 +31,5 @@
     [self.delegate dismissMe];
     
 }
+
 @end
