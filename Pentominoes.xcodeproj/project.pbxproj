@@ -430,6 +430,7 @@
 		1E54EDEA17DCB8E100451519 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pentominoes/Pentominoes-Prefix.pch";
 				INFOPLIST_FILE = "Pentominoes/Pentominoes-Info.plist";
@@ -441,6 +442,7 @@
 		1E54EDEB17DCB8E100451519 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Pentominoes/Pentominoes-Prefix.pch";
 				INFOPLIST_FILE = "Pentominoes/Pentominoes-Info.plist";

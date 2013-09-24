@@ -171,6 +171,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </objects>
+            <point key="canvasLocation" x="-36" y="-159"/>
         </scene>
         <!--Info View Controller-->
         <scene sceneID="D50-pr-buO">
@@ -226,35 +227,6 @@
         <image name="resetButton.png" width="73" height="44"/>
         <image name="solveButton.png" width="73" height="44"/>
     </resources>
-    <classes>
-        <class className="InfoViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/InfoViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="dismissPressed:"/>
-                <relationship kind="outlet" name="infoLabel" candidateClass="UILabel"/>
-            </relationships>
-        </class>
-        <class className="JGSViewController" superclassName="UIViewController">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/JGSViewController.h"/>
-            <relationships>
-                <relationship kind="action" name="newBoardSelected:"/>
-                <relationship kind="action" name="resetPieces:"/>
-                <relationship kind="action" name="solveGame:"/>
-                <relationship kind="action" name="unwindSegue:" candidateClass="UIStoryboardSegue"/>
-                <relationship kind="outlet" name="board1" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="board2" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="board3" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="board4" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="board5" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="board6" candidateClass="UIButton"/>
-                <relationship kind="outlet" name="mainBoard" candidateClass="UIImageView"/>
-                <relationship kind="outlet" name="solveButton" candidateClass="UIButton"/>
-            </relationships>
-        </class>
-        <class className="UIStoryboardSegue" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIStoryboardSegue.h"/>
-        </class>
-    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar" statusBarStyle="blackTranslucent"/>
         <simulatedOrientationMetrics key="orientation"/>

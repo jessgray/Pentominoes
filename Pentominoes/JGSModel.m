@@ -41,6 +41,8 @@
     
     // Make the mutable array immutable
     self.pieceImages = [NSArray arrayWithArray:tempImages];
+
+    [tempImages release];
 }
 
 - (void)initSolutions {

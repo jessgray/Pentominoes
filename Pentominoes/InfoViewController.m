@@ -10,7 +10,7 @@
 
 @interface InfoViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel *infoLabel;
+@property (retain, nonatomic) IBOutlet UILabel *infoLabel;
 - (IBAction)dismissPressed:(id)sender;
 
 @end
