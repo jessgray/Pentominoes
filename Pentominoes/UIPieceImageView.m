@@ -52,11 +52,11 @@
 }
 
 - (void)setOriginalFrame:(CGRect)frame {
-    frame = self.originalFrame;
+    self.originalFrame = frame;
 }
 
 - (void)setNewFrame:(CGRect)frame {
-    frame = self.frame;
+    self.frame = frame;
 }
 
 - (void)increaseFlips {

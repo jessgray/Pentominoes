@@ -71,7 +71,7 @@ static const CGFloat kPieceScale = 0.8;
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    self.boardPieces = [[NSMutableArray alloc] init];
+    _boardPieces = [[NSMutableArray alloc] init];
     
     NSArray *pieceImages = [_model getPieceImages];
     
@@ -85,6 +85,7 @@ static const CGFloat kPieceScale = 0.8;
         
         boardPiece.userInteractionEnabled = YES;
         [self.boardPieces addObject:boardPiece];
+        [boardPiece release];
     }
     
     [self defineAndAddGestures];
@@ -99,15 +100,13 @@ static const CGFloat kPieceScale = 0.8;
     
     // Create a container to hold all of the pieces
     CGRect frame = CGRectMake(kEdgeMargin, boardSize.height+kSpaceBelowMainBoard, screenSize.width-kEdgeMargin, screenSize.height-kSpaceBelowMainBoard-boardSize.height);
-    self.piecesContainer = [[UIImageView alloc] initWithFrame:frame];
     
-    
+    _piecesContainer = [[UIImageView alloc] initWithFrame:frame];
     self.piecesContainer.userInteractionEnabled = YES;
     
     // Add pieces to the game board
     [self.view addSubview:self.piecesContainer];
-    
-    [self movePiecesToDefaultPosition];
+
 }
 
 - (void)didReceiveMemoryWarning
