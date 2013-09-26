@@ -13,11 +13,7 @@
 
 - (NSInteger)getNumFlips;
 - (NSInteger)getNumRotations;
-- (CGRect)getFrame;
-- (CGRect)getOriginalFrame;
 
 - (void)increaseFlips;
 - (void)increaseRotations;
-- (void)setNewFrame:(CGRect)frame;
-- (void)setOriginalFrame:(CGRect)frame;
 @end

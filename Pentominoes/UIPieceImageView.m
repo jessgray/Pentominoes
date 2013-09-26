@@ -11,8 +11,6 @@
 @interface UIPieceImageView ()
 @property NSInteger numRotations;
 @property NSInteger numFlips;
-@property (nonatomic)  CGRect newFrame;
-@property (nonatomic) CGRect originalFrame;
 
 @end
 
@@ -31,8 +29,6 @@
 - (void)reset {
     self.numFlips = 0;
     self.numRotations = 0;
-    self.newFrame = CGRectMake(0, 0, 0, 0);
-    self.originalFrame = CGRectMake(0, 0, 0, 0);
 }
 
 - (NSInteger)getNumFlips {
@@ -41,22 +37,6 @@
 
 - (NSInteger)getNumRotations {
     return self.numRotations;
-}
-
-- (CGRect)getFrame {
-    return self.frame;
-}
-
-- (CGRect)getOriginalFrame {
-    return self.originalFrame;
-}
-
-- (void)setOriginalFrame:(CGRect)frame {
-    self.originalFrame = frame;
-}
-
-- (void)setNewFrame:(CGRect)frame {
-    self.frame = frame;
 }
 
 - (void)increaseFlips {

@@ -106,6 +106,8 @@ static const CGFloat kPieceScale = 0.8;
     
     // Add pieces to the game board
     [self.view addSubview:self.piecesContainer];
+    
+    [self movePiecesToDefaultPosition];
 
 }
 
@@ -198,7 +200,7 @@ static const CGFloat kPieceScale = 0.8;
 - (void)returnPieceToOriginalSpot: (UIPieceImageView *)piece {
     
     [UIView animateWithDuration:kAnimationTransition animations:^{
-        [piece setFrame:[piece getOriginalFrame]];
+        [piece setFrame:piece.frame];
     }];
 }
 
@@ -239,9 +241,9 @@ static const CGFloat kPieceScale = 0.8;
         [self.piecesContainer addSubview:piece];
         [piece setFrame:pieceFrame];
         
-        [piece setOriginalFrame:piece.frame];
+        xCoord +=
         
-        xCoord += pieceFrame.size.width + kColumnSpaceBetweenPieces;
+        pieceFrame.size.width + kColumnSpaceBetweenPieces;
     }
 }
 
@@ -394,13 +396,13 @@ static const CGFloat kPieceScale = 0.8;
 
 - (void)applyTransformWithAnimation: (UIPieceImageView *)piece withScale: (CGFloat)scaleRatio {
     
-    [piece setNewFrame:piece.frame];
+    [piece setFrame:piece.frame];
     
     [UIView animateWithDuration:kSnapTransition animations:^{
         [piece setTransform:CGAffineTransformScale(piece.transform, scaleRatio, scaleRatio)];
     }];
     
-    piece.frame = [piece getFrame];
+    piece.frame = [piece frame];
 }
 
 
