@@ -41,6 +41,7 @@ static const NSInteger kMaxNumRotations = 4;
 
 @property NSUInteger currentBoard;
 @property (nonatomic, strong) NSArray *boardButtons;
+@property (nonatomic, strong) NSMutableArray *remainingPieces;
 @property (nonatomic, strong) NSMutableArray *boardPieces;
 @property (nonatomic, strong) UIView *piecesContainer;
 
@@ -63,7 +64,8 @@ static const NSInteger kMaxNumRotations = 4;
 
 - (void)dealloc {
     [_model release];
-    
+    [_remainingPieces release];
+    [_boardPieces release];
     [super dealloc];
 }
 
@@ -73,6 +75,7 @@ static const NSInteger kMaxNumRotations = 4;
 	// Do any additional setup after loading the view, typically from a nib.
     
     _boardPieces = [[NSMutableArray alloc] init];
+    _remainingPieces = [[NSMutableArray alloc] init];
     
     NSArray *pieceImages = [_model getPieceImages];
     
@@ -89,6 +92,7 @@ static const NSInteger kMaxNumRotations = 4;
         [boardPiece release];
     }
     
+    [self.remainingPieces setArray:self.boardPieces];
     [self defineAndAddGestures];
     
     // Put all board buttons into an array for user interaction enabled toggling
@@ -187,6 +191,8 @@ static const NSInteger kMaxNumRotations = 4;
             
             boardPieceIndex++;
         }
+        
+        [self.remainingPieces removeAllObjects];
     }
 }
 
@@ -194,6 +200,7 @@ static const NSInteger kMaxNumRotations = 4;
 - (IBAction)resetPieces:(id)sender {
     
     [self toggleBoardButtons:YES];
+    [self.remainingPieces setArray:self.boardPieces];
     
     [UIImageView animateWithDuration:kAnimationTransition animations:^{
         // Move pieces back to the original area
@@ -225,13 +232,13 @@ static const NSInteger kMaxNumRotations = 4;
     CGFloat largestHeight = 0.0;
     
     // Undo any transforms applied to pieces
-    for (UIPieceImageView *piece in self.boardPieces) {
+    for (UIPieceImageView *piece in self.remainingPieces) {
         piece.transform = CGAffineTransformIdentity;
         [piece reset];
     }
     
     // Place each piece into the container, spacing them appropriately
-    for (UIPieceImageView *piece in self.boardPieces) {
+    for (UIPieceImageView *piece in self.remainingPieces) {
         CGSize pieceSize = piece.bounds.size;
         
         if(pieceSize.height > largestHeight) {
@@ -363,7 +370,14 @@ static const NSInteger kMaxNumRotations = 4;
             if(![self isPieceOverGameBoard:piece]) {
                 piece.center = [sender locationInView:self.view];
                 [self.view addSubview:piece];
+                
+                // Add piece to piece remaining in the playing space
+                [self.remainingPieces addObject:piece];
+                
             } else {
+                // Remove piece from pieces remaining in the playing space
+                [self.remainingPieces removeObject:piece];
+                
                 [UIView animateWithDuration:kSnapTransition animations:^{
                     [self snapPiece:piece];
                 }];
