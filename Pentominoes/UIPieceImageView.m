@@ -9,7 +9,7 @@
 #import "UIPieceImageView.h"
 
 @interface UIPieceImageView ()
-@property NSInteger numRotations;
+@property (nonatomic)  NSInteger numRotations;
 @property NSInteger numFlips;
 
 @end
@@ -52,6 +52,15 @@
         self.numRotations = 0;
     }
 }
+
+- (void)addNumRotations:(NSInteger)numRotations {
+    
+    _numRotations += numRotations;
+    if(self.numRotations >= 4) {
+        self.numRotations -= 4;
+    }
+}
+
 
 
 /*

@@ -20,6 +20,7 @@ static const NSInteger kSideOfSquare = 30;
 static const CGFloat kAnimationTransition = 1.5;
 static const CGFloat kSnapTransition = 0.3;
 static const CGFloat kPieceScale = 0.8;
+static const NSInteger kMaxNumRotations = 4;
 
 
 @interface JGSViewController () <InfoDelegate>
@@ -158,7 +159,19 @@ static const CGFloat kPieceScale = 0.8;
             CGPoint origin = [[currentPiece superview] convertPoint:currentPiece.frame.origin toView:self.mainBoard];
             [currentPiece setFrame: CGRectMake(origin.x, origin.y, currentPiece.frame.size.width, currentPiece.frame.size.height)];
             
+            // Account for pieces that have already been rotated/flipped
+            if([currentPiece getNumRotations] > 0) {
+                [currentPiece addNumRotations:numRotations + kMaxNumRotations-[currentPiece getNumRotations]];
+            }
+            if([currentPiece getNumFlips] > 0) {
+                [currentPiece increaseFlips];
+            }
+            
             [UIView animateWithDuration:kAnimationTransition animations:^{
+                
+                // Reset piece in case it was previously rotated or flipped
+                currentPiece.transform = CGAffineTransformIdentity;
+                
                 // Apply rotations and flips
                 if(numRotations > 0) {
                     currentPiece.transform = CGAffineTransformMakeRotation(numRotations*M_PI_2);
@@ -214,6 +227,7 @@ static const CGFloat kPieceScale = 0.8;
     // Undo any transforms applied to pieces
     for (UIPieceImageView *piece in self.boardPieces) {
         piece.transform = CGAffineTransformIdentity;
+        [piece reset];
     }
     
     // Place each piece into the container, spacing them appropriately

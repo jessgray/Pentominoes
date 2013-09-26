@@ -16,4 +16,5 @@
 
 - (void)increaseFlips;
 - (void)increaseRotations;
+- (void)addNumRotations:(NSInteger)numRotations;
 @end
