@@ -31,29 +31,29 @@
     self.numRotations = 0;
 }
 
-- (NSInteger)getNumFlips {
+- (NSInteger)NumFlips {
     return self.numFlips;
 }
 
-- (NSInteger)getNumRotations {
+- (NSInteger)NumRotations {
     return self.numRotations;
 }
 
-- (void)increaseFlips {
+- (void)IncreaseFlips {
     self.numFlips++;
     if(self.numFlips == 2) {
         self.numFlips = 0;
     }
 }
 
-- (void)increaseRotations {
+- (void)IncreaseRotations {
     self.numRotations++;
     if(self.numRotations == 4) {
         self.numRotations = 0;
     }
 }
 
-- (void)addNumRotations:(NSInteger)numRotations {
+- (void)AddNumRotations:(NSInteger)numRotations {
     
     _numRotations += numRotations;
     if(self.numRotations >= 4) {

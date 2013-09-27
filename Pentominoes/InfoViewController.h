@@ -10,10 +10,14 @@
 
 @protocol InfoDelegate <NSObject>
 
--(void)dismissMe;
+- (void)dismissMe;
+- (void)changeBoardBackground: (NSInteger)boardBackground;
 
 @end
 
 @interface InfoViewController : UIViewController
+
 @property (retain, nonatomic) id<InfoDelegate> delegate;
+@property NSInteger selectedBoardBackground;
+
 @end

@@ -37,6 +37,8 @@ static const NSInteger kMaxNumRotations = 4;
 @property (retain, nonatomic) IBOutlet UIButton *board5;
 @property (retain, nonatomic) IBOutlet UIButton *board6;
 @property (retain, nonatomic) IBOutlet UIButton *solveButton;
+@property (retain, nonatomic) IBOutlet UIImageView *boardBackground;
+
 
 
 @property NSUInteger currentBoard;
@@ -44,6 +46,7 @@ static const NSInteger kMaxNumRotations = 4;
 @property (nonatomic, strong) NSMutableArray *remainingPieces;
 @property (nonatomic, strong) NSMutableArray *boardPieces;
 @property (nonatomic, strong) UIView *piecesContainer;
+@property NSInteger boardBackgroundImage;
 
 -(IBAction)unwindSegue:(UIStoryboardSegue*)segue;
 
@@ -66,6 +69,9 @@ static const NSInteger kMaxNumRotations = 4;
     [_model release];
     [_remainingPieces release];
     [_boardPieces release];
+    [_boardButtons release];
+    [_boardBackground release];
+    [_boardBackground release];
     [super dealloc];
 }
 
@@ -77,10 +83,10 @@ static const NSInteger kMaxNumRotations = 4;
     _boardPieces = [[NSMutableArray alloc] init];
     _remainingPieces = [[NSMutableArray alloc] init];
     
-    NSArray *pieceImages = [_model getPieceImages];
+    NSArray *pieceImages = [_model ImagesForPieces];
     
     // Create mutable array of board pieces that are each UIPieceImageViews half the size of their corresponding UIImage
-    for(NSUInteger i = 0; i < [[_model getBoardPieceLetters] count]; i++) {
+    for(NSUInteger i = 0; i < [[_model LettersForBoardPieces] count]; i++) {
         
         UIPieceImageView *boardPiece = [[UIPieceImageView alloc] initWithImage:pieceImages[i]];
         
@@ -137,7 +143,7 @@ static const NSInteger kMaxNumRotations = 4;
 - (IBAction)newBoardSelected:(id)sender {
     
     self.currentBoard = [sender tag] -1;
-    self.mainBoard.image = [_model getBoardImage:[sender tag] -1];
+    self.mainBoard.image = [_model BoardImageForBoardNumber:[sender tag] -1];
 }
 
 - (IBAction)solveGame:(id)sender {
@@ -148,9 +154,9 @@ static const NSInteger kMaxNumRotations = 4;
         NSUInteger boardPieceIndex = 0;
         
         // Move each piece onto the game board in the correct position
-        for (NSString *key in [_model getBoardPieceLetters]) {
+        for (NSString *key in [_model LettersForBoardPieces]) {
             
-            NSDictionary *currentSolution = [_model getSolutionForPiece:key onBoard:self.currentBoard-1];
+            NSDictionary *currentSolution = [_model SolutionForPiece:key onBoard:self.currentBoard-1];
             NSInteger xCoord, yCoord, numRotations, numFlips;
             UIPieceImageView *currentPiece = [self.boardPieces objectAtIndex:boardPieceIndex];
             
@@ -164,11 +170,11 @@ static const NSInteger kMaxNumRotations = 4;
             [currentPiece setFrame: CGRectMake(origin.x, origin.y, currentPiece.frame.size.width, currentPiece.frame.size.height)];
             
             // Account for pieces that have already been rotated/flipped
-            if([currentPiece getNumRotations] > 0) {
-                [currentPiece addNumRotations:numRotations + kMaxNumRotations-[currentPiece getNumRotations]];
+            if([currentPiece NumRotations] > 0) {
+                [currentPiece AddNumRotations:numRotations + kMaxNumRotations-[currentPiece NumRotations]];
             }
-            if([currentPiece getNumFlips] > 0) {
-                [currentPiece increaseFlips];
+            if([currentPiece NumFlips] > 0) {
+                [currentPiece IncreaseFlips];
             }
             
             [UIView animateWithDuration:kAnimationTransition animations:^{
@@ -262,9 +268,7 @@ static const NSInteger kMaxNumRotations = 4;
         [self.piecesContainer addSubview:piece];
         [piece setFrame:pieceFrame];
         
-        xCoord +=
-        
-        pieceFrame.size.width + kColumnSpaceBetweenPieces;
+        xCoord += pieceFrame.size.width + kColumnSpaceBetweenPieces;
     }
 }
 
@@ -285,6 +289,10 @@ static const NSInteger kMaxNumRotations = 4;
         [boardPiece addGestureRecognizer:singleTap];
         [boardPiece addGestureRecognizer:doubleTap];
         [boardPiece addGestureRecognizer:pan];
+        
+        [singleTap release];
+        [doubleTap release];
+        [pan release];
     }
 }
 
@@ -295,10 +303,10 @@ static const NSInteger kMaxNumRotations = 4;
     
     if(sender.state == UIGestureRecognizerStateEnded){
         
-        [piece increaseRotations];
+        [piece IncreaseRotations];
         
         // If piece has been flipped, need to make rotation direction -1 in order to keep clockwise rotation
-        NSInteger rotationDirection = ([piece getNumFlips] == 1) ? -1 : 1;
+        NSInteger rotationDirection = ([piece NumFlips] == 1) ? -1 : 1;
         
         // Animate rotation 90 degrees clockwise
         [UIView animateWithDuration:kSnapTransition animations:^{
@@ -321,10 +329,10 @@ static const NSInteger kMaxNumRotations = 4;
         // If image has been rotated an odd number of times, flip needs to use 1 for x and -1 for y to keep
         // flips consistent
         
-        CGFloat flipX = ([piece getNumRotations] %2 == 0) ? -1.0 : 1.0;
+        CGFloat flipX = ([piece NumRotations] %2 == 0) ? -1.0 : 1.0;
         CGFloat flipY = -1*flipX;
         
-        [piece increaseFlips];
+        [piece IncreaseFlips];
         
         // Animate flip
         [UIView animateWithDuration:kSnapTransition animations:^{
@@ -435,8 +443,30 @@ static const NSInteger kMaxNumRotations = 4;
 
 
 #pragma mark - Info Delegate
--(void)dismissMe {
+- (void)dismissMe {
     [self dismissViewControllerAnimated:YES completion:NULL];
+}
+
+- (void)changeBoardBackground:(NSInteger)boardBackground {
+    
+    switch (boardBackground) {
+        case 0:
+            self.boardBackground.backgroundColor = [UIColor colorWithRed:28/255.0 green:85/255.0 blue:144/255.0 alpha:1.0];
+            self.boardBackground.image = nil;
+            self.boardBackgroundImage = 0;
+            break;
+        case 1:
+            [self.boardBackground setImage:[UIImage imageNamed:@"woodBackground.png"]];
+            self.boardBackgroundImage = 1;
+            break;
+        case 2:
+            [self.boardBackground setImage:[UIImage imageNamed:@"grassBackground.png"]];
+            self.boardBackgroundImage = 2;
+            break;
+        default:
+            break;
+    }
+    
 }
 
 
@@ -447,6 +477,7 @@ static const NSInteger kMaxNumRotations = 4;
     if([segue.identifier isEqualToString:@"InfoSegue"]) {
         InfoViewController *infoViewController = segue.destinationViewController;
         infoViewController.delegate = self;
+        infoViewController.selectedBoardBackground = self.boardBackgroundImage;
     }
 }
 

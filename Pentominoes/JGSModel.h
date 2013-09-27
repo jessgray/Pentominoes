@@ -12,10 +12,10 @@
 - (void)initPieces;
 - (void)initSolutions;
 
--(NSArray*)getPieceImages;
-- (NSArray *)getBoardPieceLetters;
-- (NSArray *)getSolutions;
-- (NSDictionary *)getSolutionForPiece:(NSString*)piece onBoard:(NSUInteger)board;
--(UIImage*)getBoardImage: (NSUInteger)boardNumber;
+-(NSArray*)ImagesForPieces;
+- (NSArray *)LettersForBoardPieces;
+- (NSArray *)SolutionsForGame;
+- (NSDictionary *)SolutionForPiece:(NSString*)piece onBoard:(NSUInteger)board;
+-(UIImage*)BoardImageForBoardNumber:(NSUInteger)boardNumber;
 
 @end

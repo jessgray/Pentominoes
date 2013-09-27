@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E0AF49A17F4C39100A06AD2 /* grassBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0AF49817F4C39100A06AD2 /* grassBackground.png */; };
+		1E0AF49B17F4C39100A06AD2 /* woodBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0AF49917F4C39100A06AD2 /* woodBackground.png */; };
+		1E0AF49D17F4D8F200A06AD2 /* grassButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0AF49C17F4D8F200A06AD2 /* grassButton.png */; };
+		1E0AF49F17F4DA1600A06AD2 /* woodButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E0AF49E17F4DA1600A06AD2 /* woodButton.png */; };
 		1E1235CA17EA6DBC00B26DFE /* JGSModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E1235C917EA6DBC00B26DFE /* JGSModel.m */; };
 		1E54EDCA17DCB8E100451519 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E54EDC917DCB8E100451519 /* UIKit.framework */; };
 		1E54EDCC17DCB8E100451519 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E54EDCB17DCB8E100451519 /* Foundation.framework */; };
@@ -58,6 +62,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E0AF49817F4C39100A06AD2 /* grassBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grassBackground.png; sourceTree = "<group>"; };
+		1E0AF49917F4C39100A06AD2 /* woodBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = woodBackground.png; sourceTree = "<group>"; };
+		1E0AF49C17F4D8F200A06AD2 /* grassButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grassButton.png; sourceTree = "<group>"; };
+		1E0AF49E17F4DA1600A06AD2 /* woodButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = woodButton.png; sourceTree = "<group>"; };
 		1E1235C817EA6DBC00B26DFE /* JGSModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGSModel.h; sourceTree = "<group>"; };
 		1E1235C917EA6DBC00B26DFE /* JGSModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGSModel.m; sourceTree = "<group>"; };
 		1E54EDC617DCB8E100451519 /* Pentominoes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pentominoes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -201,6 +209,10 @@
 		1E54EDEC17DCBA4D00451519 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				1E0AF49E17F4DA1600A06AD2 /* woodButton.png */,
+				1E0AF49C17F4D8F200A06AD2 /* grassButton.png */,
+				1E0AF49817F4C39100A06AD2 /* grassBackground.png */,
+				1E0AF49917F4C39100A06AD2 /* woodBackground.png */,
 				1EB9E0ED17EFBB8200891665 /* largeButton.png */,
 				1E54EE2F17E2AC3300451519 /* launch.png */,
 				1E54EE3017E2AC3300451519 /* launch@2x.png */,
@@ -328,6 +340,10 @@
 				1E54EE3417E2AC3900451519 /* Default-Portrait@2x~ipad.png in Resources */,
 				1E54EE3617E2AC3F00451519 /* Default-Portrait~ipad.png in Resources */,
 				1EB9E0EE17EFBB8200891665 /* largeButton.png in Resources */,
+				1E0AF49A17F4C39100A06AD2 /* grassBackground.png in Resources */,
+				1E0AF49B17F4C39100A06AD2 /* woodBackground.png in Resources */,
+				1E0AF49D17F4D8F200A06AD2 /* grassButton.png in Resources */,
+				1E0AF49F17F4DA1600A06AD2 /* woodButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

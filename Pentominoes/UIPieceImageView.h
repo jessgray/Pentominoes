@@ -11,10 +11,10 @@
 @interface UIPieceImageView : UIImageView
 - (void)reset;
 
-- (NSInteger)getNumFlips;
-- (NSInteger)getNumRotations;
+- (NSInteger)NumFlips;
+- (NSInteger)NumRotations;
 
-- (void)increaseFlips;
-- (void)increaseRotations;
-- (void)addNumRotations:(NSInteger)numRotations;
+- (void)IncreaseFlips;
+- (void)IncreaseRotations;
+- (void)AddNumRotations:(NSInteger)numRotations;
 @end

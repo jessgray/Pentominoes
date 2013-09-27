@@ -51,25 +51,25 @@
     self.solutions = [NSArray arrayWithContentsOfFile:solutionsPath];
 }
 
--(NSArray*)getPieceImages {
+-(NSArray*)ImagesForPieces {
     
     return self.pieceImages;
 }
 
-- (NSArray *)getBoardPieceLetters {
+- (NSArray *)LettersForBoardPieces {
     return self.boardPieceLetters;
 }
 
-- (NSArray *)getSolutions {
+- (NSArray *)SolutionsForGame {
     return self.solutions;
 }
 
-- (NSDictionary *)getSolutionForPiece:(NSString*)piece onBoard:(NSUInteger)board {
+- (NSDictionary *)SolutionForPiece:(NSString*)piece onBoard:(NSUInteger)board {
     NSDictionary *solution  = [[self.solutions objectAtIndex:board] valueForKey:piece];
     return solution;
 }
 
--(UIImage*)getBoardImage: (NSUInteger)boardNumber {
+-(UIImage*)BoardImageForBoardNumber:(NSUInteger)boardNumber {
     NSString *boardImageName = [NSString stringWithFormat:@"Board%i.png", boardNumber];
     UIImage *mainBoardImage = [UIImage imageNamed:boardImageName];
     
